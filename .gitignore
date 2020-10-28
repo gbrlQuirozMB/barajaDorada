@@ -427,3 +427,4 @@ pip-selfcheck.json
 # End of https://www.toptal.com/developers/gitignore/api/macos,linux,python,django,pycharm+all,venv,visualstudiocode,webstorm+all
 
 docsTemp/
+static/
