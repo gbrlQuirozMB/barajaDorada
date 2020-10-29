@@ -17,4 +17,10 @@ urlpatterns = [
     path('sorteos/detail/<pk>/', SorteoDetailView.as_view(), ),
     path('sorteos/update/<pk>/', SorteoUpdateView.as_view(), ),
     path('sorteos/delete/<pk>/', SorteoDeleteView.as_view(), ),
+    # ----------------------------------------------------------------------------------Imagen
+    path('imagenes/create/', ImagenCreateView.as_view(), ),
+    path('imagenes/list/', ImagenListView.as_view(), ),
+    path('imagenes/detail/<pk>/', ImagenDetailView.as_view(), ),
+    path('imagenes/update/<pk>/', ImagenUpdateView.as_view(), ),
+    path('imagenes/delete/<pk>/', ImagenDeleteView.as_view(), ),
 ]
