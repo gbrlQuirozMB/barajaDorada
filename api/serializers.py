@@ -28,3 +28,11 @@ class ImagenSerializer(serializers.ModelSerializer):
     class Meta:
         model = Imagen
         fields = '__all__'
+
+
+class SorteoDetailSerializer(serializers.ModelSerializer):
+    imagenes = ImagenSerializer(required=False, many=True)
+
+    class Meta:
+        model = Sorteo
+        fields = ['id', 'titulo', 'descripcion', 'detalles', 'activo', 'fechaHoraSorteo', 'imagenes']
