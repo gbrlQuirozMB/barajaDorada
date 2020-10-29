@@ -21,6 +21,7 @@ class Sorteo(models.Model):
 
     class Meta:
         db_table = 'sorteos'
+        ordering = ['-fechaHoraSorteo']
 
 
 class Imagen(models.Model):

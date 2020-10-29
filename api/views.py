@@ -28,4 +28,36 @@ class CartaDeleteView(DestroyAPIView):
     serializer_class = CartaSerializer
 
 
+# ----------------------------------------------------------------------------------Sorteo
+class SorteoCreateView(CreateAPIView):
+    serializer_class = SorteoSerializer
 
+
+class SorteoListView(ListAPIView):
+    serializer_class = SorteoSerializer
+
+    def get_queryset(self):
+        queryset = Sorteo.objects.all()
+        activo = self.request.query_params.get('activo', None)
+        if activo is not None:
+            if activo == 'true':
+                activo = True
+            else:
+                activo = False
+            queryset = queryset.filter(activo=activo)
+        return queryset
+
+
+class SorteoDetailView(RetrieveAPIView):
+    queryset = Sorteo.objects.filter()
+    serializer_class = SorteoSerializer
+
+
+class SorteoUpdateView(RetrieveUpdateAPIView):
+    queryset = Sorteo.objects.filter()
+    serializer_class = SorteoSerializer
+
+
+class SorteoDeleteView(DestroyAPIView):
+    queryset = Sorteo.objects.filter()
+    serializer_class = SorteoSerializer
