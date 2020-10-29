@@ -50,7 +50,7 @@ class SorteoListView(ListAPIView):
 
 class SorteoDetailView(RetrieveAPIView):
     queryset = Sorteo.objects.filter()
-    serializer_class = SorteoSerializer
+    serializer_class = SorteoDetailSerializer
 
 
 class SorteoUpdateView(RetrieveUpdateAPIView):
