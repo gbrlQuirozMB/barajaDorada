@@ -61,3 +61,28 @@ class SorteoUpdateView(RetrieveUpdateAPIView):
 class SorteoDeleteView(DestroyAPIView):
     queryset = Sorteo.objects.filter()
     serializer_class = SorteoSerializer
+
+
+# ----------------------------------------------------------------------------------Imagen
+class ImagenCreateView(CreateAPIView):
+    serializer_class = ImagenSerializer
+
+
+class ImagenListView(ListAPIView):
+    queryset = Imagen.objects.all()
+    serializer_class = ImagenSerializer
+
+
+class ImagenDetailView(RetrieveAPIView):
+    queryset = Imagen.objects.filter()
+    serializer_class = ImagenSerializer
+
+
+class ImagenUpdateView(RetrieveUpdateAPIView):
+    queryset = Imagen.objects.filter()
+    serializer_class = ImagenSerializer
+
+
+class ImagenDeleteView(DestroyAPIView):
+    queryset = Imagen.objects.filter()
+    serializer_class = ImagenSerializer
