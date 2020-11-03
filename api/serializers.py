@@ -4,6 +4,11 @@ from .models import *
 
 
 class CartaSerializer(serializers.ModelSerializer):
+    imagen = serializers.SerializerMethodField()
+
+    def get_imagen(self, obj):
+        return obj.imagen.url
+
     class Meta:
         model = Carta
         fields = '__all__'
@@ -39,10 +44,15 @@ class SorteoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Sorteo
-        fields = ['id', 'titulo', 'descripcion', 'detalles', 'activo', 'fechaHoraSorteoA', 'imagen']
+        fields = ['id', 'titulo', 'descripcion', 'detalles', 'activo', 'fechaHoraSorteo', 'imagen']
 
 
 class ImagenSerializer(serializers.ModelSerializer):
+    imagen = serializers.SerializerMethodField()
+
+    def get_imagen(self, obj):
+        return obj.imagen.url
+
     class Meta:
         model = Imagen
         fields = '__all__'
