@@ -1,5 +1,6 @@
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView, DestroyAPIView, RetrieveUpdateAPIView
 
+from comercio.models import *
 from .serializers import *
 
 
@@ -26,6 +27,23 @@ class CartaUpdateView(RetrieveUpdateAPIView):
 class CartaDeleteView(DestroyAPIView):
     queryset = Carta.objects.filter()
     serializer_class = CartaSerializer
+
+
+class CartasDisponiblesListView(ListAPIView):
+    serializer_class = CartaSerializer
+
+    def get_queryset(self):
+        queryset = Carrito.objects.all()
+        token = self.request.query_params.get('token', None)
+        sorteo = self.request.query_params.get('sorteo', None)
+        if token is not None and sorteo is not None:
+            # obtenemos los id de carta que cumplan con el token de sesion y con sorteo_id
+            queryset = queryset.filter(token=token, sorteo=sorteo).values('carta')
+            # obtenemos las cartas que no se han utilizado para ese sorteo
+            queryset = Carta.objects.exclude(id__in=queryset)
+        else:
+            return None
+        return queryset
 
 
 # ----------------------------------------------------------------------------------Sorteo

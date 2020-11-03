@@ -11,6 +11,7 @@ urlpatterns = [
     path('cartas/detail/<pk>/', CartaDetailView.as_view(), ),
     path('cartas/update/<pk>/', CartaUpdateView.as_view(), ),
     path('cartas/delete/<pk>/', CartaDeleteView.as_view(), ),
+    path('cartas-disponibles/', CartasDisponiblesListView.as_view(), ),
     # ----------------------------------------------------------------------------------Sorteo
     path('sorteos/create/', SorteoCreateView.as_view(), ),
     path('sorteos/list/', SorteoListView.as_view(), ),

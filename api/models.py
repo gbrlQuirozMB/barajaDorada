@@ -18,6 +18,7 @@ class Sorteo(models.Model):
     detalles = models.TextField(blank=True, null=True)
     activo = models.BooleanField(default=True)
     fechaHoraSorteo = models.DateTimeField(db_column='fecha_hora_sorteo')
+    costoBoleto = models.DecimalField(max_digits=7, decimal_places=2, db_column='costo_boleto', blank=False, null=False, default=0.00)
 
     class Meta:
         db_table = 'sorteos'
