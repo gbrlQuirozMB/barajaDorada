@@ -39,7 +39,7 @@ class SorteoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Sorteo
-        fields = ['id', 'titulo', 'descripcion', 'detalles', 'activo', 'fechaHoraSorteo', 'imagen']
+        fields = ['id', 'titulo', 'descripcion', 'detalles', 'activo', 'fechaHoraSorteoA', 'imagen']
 
 
 class ImagenSerializer(serializers.ModelSerializer):
@@ -50,6 +50,7 @@ class ImagenSerializer(serializers.ModelSerializer):
 
 class SorteoDetailSerializer(serializers.ModelSerializer):
     imagenes = ImagenSerializer(required=False, many=True)
+    fechaHoraSorteo = serializers.DateTimeField(format='%d-%b-%Y %H:%Mh')
 
     class Meta:
         model = Sorteo
