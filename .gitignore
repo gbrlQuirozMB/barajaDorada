@@ -428,3 +428,4 @@ pip-selfcheck.json
 
 docsTemp/
 static/
+.env
