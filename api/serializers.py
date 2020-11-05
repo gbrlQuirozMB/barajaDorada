@@ -39,7 +39,7 @@ class SorteoSerializer(serializers.ModelSerializer):
         querysetI = Imagen.objects.filter(sorteo=obj.id, principal=True).values('imagen')[:1]
         dato = None
         for datos in querysetI:
-            dato = datos['imagen']
+            dato = '/' + datos['imagen']
         return dato
 
     class Meta:
