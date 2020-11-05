@@ -1,6 +1,7 @@
+from rest_framework import serializers
+
 from api.serializers import CartaSerializer
 from .models import *
-from rest_framework import serializers
 
 
 class CarritoSerializer(serializers.ModelSerializer):
@@ -14,7 +15,7 @@ class CarritoListSerializer(serializers.ModelSerializer):
     costoCarta = serializers.SerializerMethodField()
 
     def get_costoCarta(self, obj):
-        precio = Sorteo.objects.filter(id=obj.sorteo_id).values_list('costoBoleto', flat=True)
+        precio = Sorteo.objects.filter(id=obj.sorteo_id).values_list('costoCarta', flat=True)
         return precio[0]
 
     class Meta:

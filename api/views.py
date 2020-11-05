@@ -5,8 +5,8 @@ from .serializers import *
 
 
 # ----------------------------------------------------------------------------------Carta
-class CartaCreateView(CreateAPIView):
-    serializer_class = CartaSerializer
+# class CartaCreateView(CreateAPIView):
+#     serializer_class = CartaSerializer
 
 
 class CartaListView(ListAPIView):
@@ -24,9 +24,9 @@ class CartaUpdateView(RetrieveUpdateAPIView):
     serializer_class = CartaSerializer
 
 
-class CartaDeleteView(DestroyAPIView):
-    queryset = Carta.objects.filter()
-    serializer_class = CartaSerializer
+# class CartaDeleteView(DestroyAPIView):
+#     queryset = Carta.objects.filter()
+#     serializer_class = CartaSerializer
 
 
 class CartasDisponiblesListView(ListAPIView):

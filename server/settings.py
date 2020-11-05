@@ -25,9 +25,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'q*fod9i!3ol($1cok+)#p(yr_gu-#8!n#)wckmz0_q4b=%tk5+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = config('DEBUG', default = False, cast = bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -117,12 +118,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-
-STATIC_ROOT = config('STATIC_ROOT', default='')
 STATIC_URL = '/static/'
+STATIC_ROOT = config('STATIC_ROOT', default='')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
-MEDIA_URL = config('MEDIA_URL', default='/')
-MEDIA_ROOT = config('MEDIA_ROOT', default='/')
+MEDIA_URL = config('MEDIA_URL', default='/uploads/')
+MEDIA_ROOT = config('MEDIA_ROOT', default='uploads/')
 
 # STRIPE_SECRET_KEY = 'sk_test_51HWWDaIGNJRztEVoxZRBRq2TPER33rBn7yC68pYsSh0VJHxkCtf1GNubxca89ceMeHJQ5bDDRUWHa3IAMQ3P24he00yqys204G'
 # STRIPE_PUBLISHABLE_KEY = 'pk_test_51HWWDaIGNJRztEVoPs3bgIy8lzmtHeweZ9rX2qJIC30Hgo932Atb7RKTdfQ0P4JjjpdGS105Zz11f2wohWAQmngM003Ts3uFBy'

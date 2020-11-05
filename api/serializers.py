@@ -4,7 +4,7 @@ from .models import *
 
 
 class CartaSerializer(serializers.ModelSerializer):
-    imagen = serializers.SerializerMethodField()
+    imagen = serializers.SerializerMethodField(read_only=True)
 
     def get_imagen(self, obj):
         return obj.imagen.url
@@ -21,7 +21,7 @@ class SorteoSerializer(serializers.ModelSerializer):
         querysetI = Imagen.objects.filter(sorteo=obj.id, principal=True).values('imagen')[:1]
         dato = None
         for datos in querysetI:
-            dato = '/' + datos['imagen']
+            dato = '/uploads/' + datos['imagen']
         return dato
 
     class Meta:
@@ -30,7 +30,7 @@ class SorteoSerializer(serializers.ModelSerializer):
 
 
 class ImagenSerializer(serializers.ModelSerializer):
-    imagen = serializers.SerializerMethodField()
+    imagen = serializers.SerializerMethodField(read_only=True)
 
     def get_imagen(self, obj):
         return obj.imagen.url
