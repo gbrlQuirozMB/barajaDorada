@@ -11,7 +11,8 @@ urlpatterns = [
     path('comprar-carta/', CarritoCreateView.as_view(), ),
     path('mostrar-carrito/', CarritoListView.as_view(), ),
     path('quitar-carta/<pk>/', CarritoDeleteView.as_view(), ),
-    path('comprar/', ComprarView.as_view(), ),
+    path('finalizar-compra/', ComprarView.as_view(), ),
+
     path('session/', CrearSession.as_view(), ),
     path('intento/', CrearIntento.as_view(), ),
     path('datos-tarjeta/', views.index, ),
