@@ -6,7 +6,8 @@ from django.db.models import ForeignKey, CASCADE
 
 class Carta(models.Model):
     nombre = models.CharField(max_length=100)
-    imagen = models.ImageField(upload_to='static/img/')
+    # imagen = models.ImageField(upload_to='static/img/')
+    imagen = models.ImageField()
 
     class Meta:
         db_table = 'cartas'
@@ -18,7 +19,7 @@ class Sorteo(models.Model):
     detalles = models.TextField(blank=True, null=True)
     activo = models.BooleanField(default=True)
     fechaHoraSorteo = models.DateTimeField(db_column='fecha_hora_sorteo')
-    costoBoleto = models.DecimalField(max_digits=7, decimal_places=2, db_column='costo_boleto', blank=False, null=False, default=0.00)
+    costoCarta = models.DecimalField(max_digits=7, decimal_places=2, db_column='costo_carta', blank=False, null=False, default=0.00)
 
     class Meta:
         db_table = 'sorteos'
@@ -26,7 +27,8 @@ class Sorteo(models.Model):
 
 
 class Imagen(models.Model):
-    imagen = models.ImageField(upload_to='static/img/')
+    # imagen = models.ImageField(upload_to='static/img/')
+    imagen = models.ImageField()
     principal = models.BooleanField(default=False)
     sorteo = ForeignKey(Sorteo, on_delete=CASCADE, related_name='imagenes')
 
