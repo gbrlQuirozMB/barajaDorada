@@ -4,7 +4,7 @@ from api.models import *
 # Create your models here.
 
 class Carrito(models.Model):
-    token = models.CharField(max_length=100, blank=True, null=True)
+    tokenCompra = models.CharField(max_length=100, blank=True, null=True, db_column='token_compra')
     nombreCompleto = models.CharField(max_length=255, blank=True, null=True, db_column='nombre_completo')
     email = models.EmailField(blank=True, null=True)
     carta = ForeignKey(Carta, on_delete=CASCADE, related_name='carritoCartas')

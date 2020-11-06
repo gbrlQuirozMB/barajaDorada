@@ -34,11 +34,11 @@ class CartasDisponiblesListView(ListAPIView):
 
     def get_queryset(self):
         queryset = Carrito.objects.all()
-        token = self.request.query_params.get('token', None)
+        # token = self.request.query_params.get('token', None)
         sorteo = self.request.query_params.get('sorteo', None)
-        if token is not None and sorteo is not None:
+        if sorteo is not None:
             # obtenemos los id de carta que cumplan con el token de sesion y con sorteo_id
-            queryset = queryset.filter(token=token, sorteo=sorteo).values('carta')
+            queryset = queryset.filter(sorteo=sorteo).values('carta')
             # obtenemos las cartas que no se han utilizado para ese sorteo
             queryset = Carta.objects.exclude(id__in=queryset)
         else:

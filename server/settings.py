@@ -26,7 +26,7 @@ SECRET_KEY = 'q*fod9i!3ol($1cok+)#p(yr_gu-#8!n#)wckmz0_q4b=%tk5+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
-DEBUG = config('DEBUG', default = False, cast = bool)
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = ["*"]
 
@@ -117,12 +117,22 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
-
 STATIC_URL = '/static/'
 STATIC_ROOT = config('STATIC_ROOT', default='')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
 MEDIA_URL = config('MEDIA_URL', default='/uploads/')
 MEDIA_ROOT = config('MEDIA_ROOT', default='uploads/')
 
-# STRIPE_SECRET_KEY = 'sk_test_51HWWDaIGNJRztEVoxZRBRq2TPER33rBn7yC68pYsSh0VJHxkCtf1GNubxca89ceMeHJQ5bDDRUWHa3IAMQ3P24he00yqys204G'
-# STRIPE_PUBLISHABLE_KEY = 'pk_test_51HWWDaIGNJRztEVoPs3bgIy8lzmtHeweZ9rX2qJIC30Hgo932Atb7RKTdfQ0P4JjjpdGS105Zz11f2wohWAQmngM003Ts3uFBy'
+# Claves de STRIPE
+if DEBUG:
+    STRIPE_API_KEY = config('STRIPE_API_KEY_TEST', default='sk_test_rr9VKE4Po9YQip41vMw9x18y000h9ssG70')
+else:
+    STRIPE_API_KEY = config('STRIPE_API_KEY_PROD', default='sk_test_rr9VKE4Po9YQip41vMw9x18y000h9ssG70')
+
+# Configuraciones de correo
+EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
+MAILER_EMAIL_BACKEND = EMAIL_BACKEND
+EMAIL_HOST = 'mail.booster.com.mx'
+EMAIL_HOST_USER = 'billy@booster.com.mx'
+EMAIL_HOST_PASSWORD = 'billy123!'
+EMAIL_PORT = 465
