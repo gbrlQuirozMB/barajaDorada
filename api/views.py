@@ -34,7 +34,6 @@ class CartasDisponiblesListView(ListAPIView):
 
     def get_queryset(self):
         queryset = Carrito.objects.all()
-        # token = self.request.query_params.get('token', None)
         sorteo = self.request.query_params.get('sorteo', None)
         if sorteo is not None:
             # obtenemos los id de carta que cumplan con el token de sesion y con sorteo_id
@@ -85,6 +84,13 @@ class SorteoDeleteView(DestroyAPIView):
 class ImagenCreateView(CreateAPIView):
     serializer_class = ImagenSerializer
 
+    def post(self, request, *args, **kwargs):
+        principal = self.request.data.get('principal')
+        if principal:
+            sorteo = self.request.data.get('sorteo')
+            Imagen.objects.filter(sorteo=sorteo).update(principal=False)
+
+        return self.create(request, *args, **kwargs)
 
 class ImagenListView(ListAPIView):
     queryset = Imagen.objects.all()
@@ -99,6 +105,15 @@ class ImagenDetailView(RetrieveAPIView):
 class ImagenUpdateView(RetrieveUpdateAPIView):
     queryset = Imagen.objects.filter()
     serializer_class = ImagenSerializer
+
+    def put(self, request, *args, **kwargs):
+        principal = self.request.data.get('principal')
+        if principal:
+            pk = kwargs['pk']
+            sorteo = Imagen.objects.filter(id=pk).values_list('sorteo', flat=True)
+            Imagen.objects.filter(sorteo=sorteo[0]).update(principal=False)
+
+        return self.update(request, *args, **kwargs)
 
 
 class ImagenDeleteView(DestroyAPIView):

@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-from distutils.command.config import config
+# from distutils.command.config import config
 
 from decouple import config
 

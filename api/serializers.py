@@ -4,14 +4,14 @@ from .models import *
 
 
 class CartaSerializer(serializers.ModelSerializer):
-    imagen = serializers.SerializerMethodField(read_only=True)
-
-    def get_imagen(self, obj):
-        return obj.imagen.url
-
     class Meta:
         model = Carta
         fields = '__all__'
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['imagen'] = instance.imagen.url
+        return representation
 
 
 class SorteoSerializer(serializers.ModelSerializer):
@@ -30,14 +30,16 @@ class SorteoSerializer(serializers.ModelSerializer):
 
 
 class ImagenSerializer(serializers.ModelSerializer):
-    imagen = serializers.SerializerMethodField(read_only=True)
-
-    def get_imagen(self, obj):
-        return obj.imagen.url
-
     class Meta:
         model = Imagen
         fields = '__all__'
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['imagen'] = ''
+        if instance.imagen.url is not None:
+            representation['imagen'] = instance.imagen.url
+        return representation
 
 
 class SorteoDetailSerializer(serializers.ModelSerializer):
