@@ -5,9 +5,9 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework.generics import ListAPIView, CreateAPIView
-from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from api.exceptions import *
 from .serializers import *
 
 
@@ -16,8 +16,12 @@ class CarritoCreateView(CreateAPIView):
     serializer_class = CarritoSerializer
 
     def post(self, request, *args, **kwargs):
+
+        serializer = CarritoSerializer(data=request.data)
+        if not serializer.is_valid():
+            raise CamposIncorrectos(serializer.errors)
+
         stripe.api_key = settings.STRIPE_API_KEY
-        response = {}
         # ---saber fecha y hora de la compra
         myDate = datetime.now()
         tokenCompra = myDate.strftime('%d-%m-%Y-%H:%M:%S')
@@ -28,50 +32,38 @@ class CarritoCreateView(CreateAPIView):
         sorteo = self.request.data.get('sorteo')  # valores del json
         carta = self.request.data.get('carta')  # valores del json
 
-        if carta is not None and sorteo is not None:
-            cuenta = Carrito.objects.filter(carta=carta, sorteo=sorteo).count()
-            if cuenta > 0:
-                response['code'] = 409
-                response['message'] = 'La carta ya se compro'
-                return Response(response, status=response['code'])
-            # ---cobrar
-            try:
-                tokenStripe = request.data.get('tokenStripe')
-                precio = Sorteo.objects.filter(id=sorteo).values_list('costoCarta', flat=True)
-                # stripe.Charge.create(
-                #     amount=int(precio[0]) * 100,
-                #     currency='MXN',
-                #     description='Baraja Dorada',
-                #     source=tokenStripe
-                # )
-            except:
-                response['code'] = 500
-                response['message'] = 'Error con Stripe'
-                return Response(response, status=response['code'])
-            # ---mandar correo
-            try:
-                nl = '\n'
-                nombre = self.request.data.get('nombreCompleto')
-                email = self.request.data.get('email')
-                nombreCarta = Carta.objects.filter(id=carta).values_list('nombre', flat=True)
-                datosSorteo = Sorteo.objects.filter(id=sorteo).values_list('titulo', 'fechaHoraSorteo')
-                text_content = f'Hola {nombre},{nl} Haz comprado la carta: {nombreCarta[0]},{nl} Para el sorteo: {datosSorteo[0][0]},{nl} A llevarse a cabo: {datosSorteo[0][1].strftime("%d-%b-%Y %H:%Mh")}'
-                # send_mail(
-                #     'Compra Baraja Dorada',
-                #     text_content,
-                #     'contacto@lbd.mx',
-                #     [email],
-                #     fail_silently=False,
-                # )
-            except:
-                response['code'] = 500
-                response['message'] = 'Error al enviar correo'
-                return Response(response, status=response['code'])
-
-        else:
-            response['code'] = 400
-            response['message'] = 'Datos incorrectos'
-            return Response(response, status=response['code'])
+        cuenta = Carrito.objects.filter(carta=carta, sorteo=sorteo).count()
+        if cuenta > 0:
+            raise ResponseError('La carta ya se compro', 409)
+        # ---cobrar
+        try:
+            tokenStripe = request.data.get('tokenStripe')
+            precio = Sorteo.objects.filter(id=sorteo).values_list('costoCarta', flat=True)
+            # stripe.Charge.create(
+            #     amount=int(precio[0]) * 100,
+            #     currency='MXN',
+            #     description='Baraja Dorada',
+            #     source=tokenStripe
+            # )
+        except:
+            raise ResponseError('Error con Stripe', 500)
+        # ---mandar correo
+        try:
+            nl = '\n'
+            nombre = self.request.data.get('nombreCompleto')
+            email = self.request.data.get('email')
+            nombreCarta = Carta.objects.filter(id=carta).values_list('nombre', flat=True)
+            datosSorteo = Sorteo.objects.filter(id=sorteo).values_list('titulo', 'fechaHoraSorteo')
+            text_content = f'Hola {nombre},{nl} Haz comprado la carta: {nombreCarta[0]},{nl} Para el sorteo: {datosSorteo[0][0]},{nl} A llevarse a cabo: {datosSorteo[0][1].strftime("%d-%b-%Y %H:%Mh")}'
+            # send_mail(
+            #     'Compra Baraja Dorada',
+            #     text_content,
+            #     'contacto@lbd.mx',
+            #     [email],
+            #     fail_silently=False,
+            # )
+        except:
+            raise ResponseError('Error al enviar correo', 500)
 
         return self.create(request, *args, **kwargs)
 

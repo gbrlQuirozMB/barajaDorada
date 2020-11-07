@@ -1,6 +1,7 @@
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView, DestroyAPIView, RetrieveUpdateAPIView
 
 from comercio.models import *
+from .exceptions import *
 from .serializers import *
 
 
@@ -49,6 +50,12 @@ class CartasDisponiblesListView(ListAPIView):
 class SorteoCreateView(CreateAPIView):
     serializer_class = SorteoSerializer
 
+    def post(self, request, *args, **kwargs):
+        serializer = SorteoSerializer(data=request.data)
+        if serializer.is_valid():
+            return self.create(request, *args, **kwargs)
+        raise CamposIncorrectos(serializer.errors)
+
 
 class SorteoListView(ListAPIView):
     serializer_class = SorteoSerializer
@@ -91,6 +98,7 @@ class ImagenCreateView(CreateAPIView):
             Imagen.objects.filter(sorteo=sorteo).update(principal=False)
 
         return self.create(request, *args, **kwargs)
+
 
 class ImagenListView(ListAPIView):
     queryset = Imagen.objects.all()
