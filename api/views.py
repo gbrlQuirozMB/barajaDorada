@@ -1,9 +1,12 @@
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView, DestroyAPIView, RetrieveUpdateAPIView
+from rest_framework_swagger.views import get_swagger_view
 
 from comercio.models import *
 from .exceptions import *
 from .serializers import *
 
+
+schema_view = get_swagger_view(title='Baraja Dorada API')
 
 # ----------------------------------------------------------------------------------Carta
 # class CartaCreateView(CreateAPIView):
@@ -31,6 +34,9 @@ class CartaUpdateView(RetrieveUpdateAPIView):
 
 
 class CartasDisponiblesListView(ListAPIView):
+    """
+    sorteo -- id del sorteo a buscar
+    """
     serializer_class = CartaSerializer
 
     def get_queryset(self):
@@ -58,6 +64,9 @@ class SorteoCreateView(CreateAPIView):
 
 
 class SorteoListView(ListAPIView):
+    """
+    activo -- true/false para mostar sorteos vigentes
+    """
     serializer_class = SorteoSerializer
 
     def get_queryset(self):
