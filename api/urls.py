@@ -5,6 +5,7 @@ from .views import *
 app_name = 'api'
 
 urlpatterns = [
+    path('docs/v1.0/', schema_view, ),
     # ----------------------------------------------------------------------------------Carta
     # path('cartas/create/', CartaCreateView.as_view(), ),
     path('cartas/list/', CartaListView.as_view(), ),

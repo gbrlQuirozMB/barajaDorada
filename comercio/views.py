@@ -69,6 +69,9 @@ class CarritoCreateView(CreateAPIView):
 
 
 class CompradoresListView(ListAPIView):
+    """
+    sorteo=id -- id del sorteo a buscar
+    """
     serializer_class = CarritoSerializer
 
     def get_queryset(self):
