@@ -26,7 +26,7 @@ class SorteoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Sorteo
-        fields = ['id', 'titulo', 'descripcion', 'detalles', 'activo', 'fechaHoraSorteo', 'imagen']
+        fields = ['id', 'titulo', 'descripcion', 'detalles', 'activo', 'fechaHoraSorteo', 'costoCarta', 'imagen']
 
 
 class ImagenSerializer(serializers.ModelSerializer):
@@ -48,4 +48,4 @@ class SorteoDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Sorteo
-        fields = ['id', 'titulo', 'descripcion', 'detalles', 'activo', 'fechaHoraSorteo', 'imagenes']
+        fields = ['id', 'titulo', 'descripcion', 'detalles', 'activo', 'fechaHoraSorteo', 'costoCarta', 'imagenes']
