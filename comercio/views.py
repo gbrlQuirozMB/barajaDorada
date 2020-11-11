@@ -39,12 +39,12 @@ class CarritoCreateView(CreateAPIView):
         try:
             tokenStripe = request.data.get('tokenStripe')
             precio = Sorteo.objects.filter(id=sorteo).values_list('costoCarta', flat=True)
-            # stripe.Charge.create(
-            #     amount=int(precio[0]) * 100,
-            #     currency='MXN',
-            #     description='Baraja Dorada',
-            #     source=tokenStripe
-            # )
+            stripe.Charge.create(
+                amount=int(precio[0]) * 100,
+                currency='MXN',
+                description='Baraja Dorada',
+                source=tokenStripe
+            )
         except:
             raise ResponseError('Error con Stripe', 500)
         # ---mandar correo
