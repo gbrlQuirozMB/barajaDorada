@@ -4,19 +4,25 @@ import stripe
 from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import render
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.generics import ListAPIView, CreateAPIView
 from rest_framework.views import APIView
 
 from api.exceptions import *
 from .serializers import *
 
-from rest_framework.permissions import AllowAny
+
+class CsrfExemptSessionAuthentication(SessionAuthentication):
+
+    def enforce_csrf(self, request):
+        return  # To not perform the csrf check previously happening
+
 
 # ----------------------------------------------------------------------------------Carrito
 class CarritoCreateView(CreateAPIView):
     serializer_class = CarritoSerializer
+    authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
 
-    permission_classes = (AllowAny,)
     def post(self, request, *args, **kwargs):
 
         serializer = CarritoSerializer(data=request.data)
