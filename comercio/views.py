@@ -10,11 +10,13 @@ from rest_framework.views import APIView
 from api.exceptions import *
 from .serializers import *
 
+from rest_framework.permissions import AllowAny
 
 # ----------------------------------------------------------------------------------Carrito
 class CarritoCreateView(CreateAPIView):
     serializer_class = CarritoSerializer
 
+    permission_classes = (AllowAny,)
     def post(self, request, *args, **kwargs):
 
         serializer = CarritoSerializer(data=request.data)
