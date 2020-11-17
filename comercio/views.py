@@ -20,6 +20,10 @@ class CsrfExemptSessionAuthentication(SessionAuthentication):
 
 # ----------------------------------------------------------------------------------Carrito
 class CarritoCreateView(CreateAPIView):
+    """
+    tokenCompra -- No requerido, se genera automaticamente para  guardar fecha y hora de la compra
+    tokenStripe -- Requerido, aqui se pone el token que genera Stripe para hacer la compra
+    """
     serializer_class = CarritoSerializer
     authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
 
