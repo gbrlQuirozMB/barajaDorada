@@ -1,3 +1,4 @@
+from rest_framework import permissions
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView, DestroyAPIView, RetrieveUpdateAPIView
 from rest_framework_swagger.views import get_swagger_view
 
@@ -5,9 +6,26 @@ from comercio.models import *
 from .exceptions import *
 from .serializers import *
 
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework.schemas import SchemaGenerator
+from rest_framework.views import APIView
+from rest_framework_swagger import renderers
 
-schema_view = get_swagger_view(title='Baraja Dorada API')
+# schema_view = get_swagger_view(title='Baraja Dorada API',)
 
+class SwaggerSchemaView(APIView):
+    permission_classes = [AllowAny]
+    renderer_classes = [
+        renderers.OpenAPIRenderer,
+        renderers.SwaggerUIRenderer
+    ]
+
+    def get(self, request):
+        generator = SchemaGenerator(title='Baraja Dorada API')
+        schema = generator.get_schema(request=request, public=True)
+
+        return Response(schema)
 # ----------------------------------------------------------------------------------Carta
 # class CartaCreateView(CreateAPIView):
 #     serializer_class = CartaSerializer
@@ -38,6 +56,7 @@ class CartasDisponiblesListView(ListAPIView):
     sorteo -- id del sorteo a buscar
     """
     serializer_class = CartaSerializer
+    permission_classes = (permissions.AllowAny,)
 
     def get_queryset(self):
         queryset = Carrito.objects.all()
@@ -68,6 +87,7 @@ class SorteoListView(ListAPIView):
     activo -- true/false para mostar sorteos vigentes
     """
     serializer_class = SorteoSerializer
+    permission_classes = (permissions.AllowAny,)
 
     def get_queryset(self):
         queryset = Sorteo.objects.all()
@@ -84,6 +104,7 @@ class SorteoListView(ListAPIView):
 class SorteoDetailView(RetrieveAPIView):
     queryset = Sorteo.objects.filter()
     serializer_class = SorteoDetailSerializer
+    permission_classes = (permissions.AllowAny,)
 
 
 class SorteoUpdateView(RetrieveUpdateAPIView):
@@ -112,11 +133,13 @@ class ImagenCreateView(CreateAPIView):
 class ImagenListView(ListAPIView):
     queryset = Imagen.objects.all()
     serializer_class = ImagenSerializer
+    permission_classes = (permissions.AllowAny,)
 
 
 class ImagenDetailView(RetrieveAPIView):
     queryset = Imagen.objects.filter()
     serializer_class = ImagenSerializer
+    permission_classes = (permissions.AllowAny,)
 
 
 class ImagenUpdateView(RetrieveUpdateAPIView):

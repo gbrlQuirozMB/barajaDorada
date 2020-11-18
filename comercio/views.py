@@ -7,6 +7,7 @@ from django.shortcuts import render
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.generics import ListAPIView, CreateAPIView
 from rest_framework.views import APIView
+from rest_framework import permissions
 
 from api.exceptions import *
 from .serializers import *
@@ -51,12 +52,12 @@ class CarritoCreateView(CreateAPIView):
         try:
             tokenStripe = request.data.get('tokenStripe')
             precio = Sorteo.objects.filter(id=sorteo).values_list('costoCarta', flat=True)
-            stripe.Charge.create(
-                amount=int(precio[0]) * 100,
-                currency='MXN',
-                description='Baraja Dorada',
-                source=tokenStripe
-            )
+            # stripe.Charge.create(
+            #     amount=int(precio[0]) * 100,
+            #     currency='MXN',
+            #     description='Baraja Dorada',
+            #     source=tokenStripe
+            # )
         except:
             raise ResponseError('Error con Stripe', 500)
         # ---mandar correo
@@ -85,6 +86,7 @@ class CompradoresListView(ListAPIView):
     sorteo=id -- id del sorteo a buscar
     """
     serializer_class = CarritoSerializer
+    permission_classes = (permissions.AllowAny,)
 
     def get_queryset(self):
         queryset = Carrito.objects.all()
