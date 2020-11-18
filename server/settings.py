@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_swagger',
+    'rest_framework.authtoken',
+    'rest_auth',
     'api',
     'comercio',
 ]
@@ -58,19 +60,38 @@ MIDDLEWARE = [
 
 REST_FRAMEWORK = {
     # --------- Por si se necesita autenticar
-    # 'DEFAULT_AUTHENTICATION_CLASSES': (
-    #     'rest_framework.authentication.TokenAuthentication',
-    #     # 'rest_framework.authentication.SessionAuthentication',
-    #     # 'rest_framework.authentication.BasicAuthentication',
-    # ),
-    # 'DEFAULT_PERMISSION_CLASSES': (
-    #     'rest_framework.permissions.IsAuthenticated',
-    # ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
 
 
 # REST_FRAMEWORK = {'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'}
+
+
+# SWAGGER_SETTINGS = {
+#     # 'SECURITY_DEFINITIONS': {
+#     #     'api_key': {
+#     #         'type': 'apiKey',
+#     #         'in': 'header',
+#     #         'name': 'Authorization'
+#     #     }
+#     # },
+#     # 'REFETCH_SCHEMA_WITH_AUTH': True,
+#
+#     'SECURITY_DEFINITIONS': {
+#         'basic': {
+#             'type': 'basic'
+#         }
+#     },
+# }
+
 
 ROOT_URLCONF = 'server.urls'
 
