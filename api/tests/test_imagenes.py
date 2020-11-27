@@ -8,6 +8,7 @@ from rest_framework.test import APITestCase
 
 from api.models import Sorteo, Imagen
 from api.serializers import ImagenSerializer
+from django.contrib.auth.models import User
 
 nl = '\n'
 
@@ -22,7 +23,7 @@ class Post200Test(APITestCase):
         image = Image.new('RGB', (100, 100))
         image.save(stream, format='jpeg')
 
-        uploaded_file = SimpleUploadedFile('./uploads/noCircula.jpg', stream.getvalue(), content_type='image/jpg')
+        uploaded_file = SimpleUploadedFile('./uploads/1-de-oros.png', stream.getvalue(), content_type='image/jpg')
 
         self.json = {
             "imagen": uploaded_file,
@@ -30,7 +31,12 @@ class Post200Test(APITestCase):
             "sorteo": 1
         }
 
+        self.user = User.objects.create_user(username='gabriel')
+
     def test(self):
+        print(self.json)
+
+        self.client.force_authenticate(user=self.user)
         response = self.client.post('/api/imagenes/create/', data=self.json, format='multipart')
         print(f'response JSON ===>>> {nl} {response.data} {nl} ---')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)

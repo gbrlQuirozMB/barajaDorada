@@ -16,6 +16,7 @@ class CartaSerializer(serializers.ModelSerializer):
 
 class SorteoSerializer(serializers.ModelSerializer):
     imagen = serializers.SerializerMethodField()
+    fechaHoraSorteo = serializers.DateTimeField(format='%d-%b-%Y %H:%Mh')
 
     def get_imagen(self, obj):
         querysetI = Imagen.objects.filter(sorteo=obj.id, principal=True).values('imagen')[:1]
