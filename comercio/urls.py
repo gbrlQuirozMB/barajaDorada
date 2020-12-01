@@ -1,9 +1,7 @@
-
 from django.urls import path
-
-from . import views
-from .views import *
 from django.views.decorators.csrf import csrf_exempt
+
+from .views import *
 
 app_name = 'comercio'
 
@@ -12,10 +10,8 @@ urlpatterns = [
     path('comprar-carta/', csrf_exempt(CarritoCreateView.as_view()), ),
     path('compradores/', CompradoresListView.as_view(), ),
 
-    # ----------------------------------------------------------------------------------stripe local NO FUNCIONA!!!
-    # path('session/', CrearSession.as_view(), ),
-    # path('intento/', CrearIntento.as_view(), ),
-    # path('datos-tarjeta/', views.index, ),
-
-
+    # ----------------------------------------------------------------------------------stripe local!!!
+    path('dummy-pagos/', DummyPagosView.as_view(), ),
+    # path('dummy-pagos/', TemplateView.as_view(template_name='comercio/dummy-pagos.html'), ),
+    path('token/', token, name='token'),
 ]

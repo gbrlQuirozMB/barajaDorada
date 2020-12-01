@@ -71,7 +71,6 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
 
-
 # REST_FRAMEWORK = {'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'}
 
 
@@ -181,9 +180,16 @@ else:
     STRIPE_API_KEY = config('STRIPE_API_KEY_PROD', default='sk_test_rr9VKE4Po9YQip41vMw9x18y000h9ssG70')
 
 # Configuraciones de correo
-EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
+
+if DEBUG:
+    # EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+    EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
+
 MAILER_EMAIL_BACKEND = EMAIL_BACKEND
-EMAIL_HOST = 'mail.booster.com.mx'
-EMAIL_HOST_USER = 'billy@booster.com.mx'
-EMAIL_HOST_PASSWORD = 'billy123!'
-EMAIL_PORT = 465
+
+EMAIL_HOST = config('EMAIL_HOST', default='mail.booster.com.mx')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='billy@booster.com.mx')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='billy123!')
+EMAIL_PORT = config('EMAIL_PORT', default=465)

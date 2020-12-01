@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dummy compras</title>
+</head>
+<body>
+    <h2>Compra por $3.69</h2>
+    <form action="/api/comercio/token/" method="post">
+        {% csrf_token %}
+        <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+            data-key="{{ key }}"
+            data-description="Dummy de pago"
+            data-amount="369"
+            data-locale="auto">
+        </script>
+    </form>
+
+</body>
+</html>

@@ -2,12 +2,12 @@ from datetime import datetime
 
 import stripe
 from django.conf import settings
-from django.http import JsonResponse
+from django.core.mail import send_mail
 from django.shortcuts import render
+from django.views.generic.base import TemplateView
+from rest_framework import permissions
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.generics import ListAPIView, CreateAPIView
-from rest_framework.views import APIView
-from rest_framework import permissions
 
 from api.exceptions import *
 from .serializers import *
@@ -52,12 +52,12 @@ class CarritoCreateView(CreateAPIView):
         try:
             tokenStripe = request.data.get('tokenStripe')
             precio = Sorteo.objects.filter(id=sorteo).values_list('costoCarta', flat=True)
-            # stripe.Charge.create(
-            #     amount=int(precio[0]) * 100,
-            #     currency='MXN',
-            #     description='Baraja Dorada',
-            #     source=tokenStripe
-            # )
+            stripe.Charge.create(
+                amount=int(precio[0]) * 100,
+                currency='MXN',
+                description='Baraja Dorada',
+                source=tokenStripe
+            )
         except:
             raise ResponseError('Error con Stripe', 500)
         # ---mandar correo
@@ -68,13 +68,13 @@ class CarritoCreateView(CreateAPIView):
             nombreCarta = Carta.objects.filter(id=carta).values_list('nombre', flat=True)
             datosSorteo = Sorteo.objects.filter(id=sorteo).values_list('titulo', 'fechaHoraSorteo')
             text_content = f'Hola {nombre},{nl} Haz comprado la carta: {nombreCarta[0]},{nl} Para el sorteo: {datosSorteo[0][0]},{nl} A llevarse a cabo: {datosSorteo[0][1].strftime("%d-%b-%Y %H:%Mh")}'
-            # send_mail(
-            #     'Compra Baraja Dorada',
-            #     text_content,
-            #     'contacto@lbd.mx',
-            #     [email],
-            #     fail_silently=False,
-            # )
+            send_mail(
+                'Compra Baraja Dorada',
+                text_content,
+                'contacto@lbd.mx',
+                [email],
+                fail_silently=False,
+            )
         except:
             raise ResponseError('Error al enviar correo', 500)
 
@@ -98,52 +98,25 @@ class CompradoresListView(ListAPIView):
         return queryset
 
 
-class CrearSession(APIView):
-    def post(self, request, *args, **kwargs):
-        stripe.api_key = 'sk_test_rr9VKE4Po9YQip41vMw9x18y000h9ssG70'
-        session = stripe.checkout.Session.create(
-            payment_method_types=['card'],
-            line_items=[{
-                'price_data': {
-                    'currency': 'MXN',
-                    'product_data': {
-                        'name': 'T-shirt',
-                    },
-                    'unit_amount': 369 * 100,
-                },
-                'quantity': 1,
-            }],
-            mode='payment',
-            success_url='https://example.com/success',
-            cancel_url='https://example.com/cancel',
-        )
-        response = {
-            'id': session.id
-        }
-        return JsonResponse(response, status=200)
+class DummyPagosView(TemplateView):
+    template_name = 'comercio/dummy-pagos.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['key'] = 'pk_test_TOPh5XSzYRTUMTsYGSD5js3G00CJodwZ02'
+        return context
 
 
-class CrearIntento(APIView):
-    def get(self, request, *args, **kwargs):
-        stripe.api_key = 'sk_test_rr9VKE4Po9YQip41vMw9x18y000h9ssG70'
-        intent = stripe.PaymentIntent.create(
-            amount=369 * 100,
-            currency='MXN',
-            payment_method_types=['card'],
-        )
-        print(intent.client_secret)
-        response = {
-            "client_secret": intent.client_secret
-        }
-        return JsonResponse(response, status=200)
-
-
-def index(request):
-    # return render(request,'comercio/index.html')
-    stripe.api_key = 'sk_test_rr9VKE4Po9YQip41vMw9x18y000h9ssG70'
-    intent = stripe.PaymentIntent.create(
-        amount=369 * 100,
-        currency='MXN',
-        payment_method_types=['card'],
-    )
-    return render(request, 'comercio/prueba.html', context={'client_secret': intent.client_secret}, )
+def token(request):
+    if request.method == 'POST':
+        stripe.api_key = settings.STRIPE_API_KEY
+        # stripe.Charge.create(
+        #     amount=369 * 100,
+        #     currency='MXN',
+        #     description='Baraja Dorada',
+        #     source=request.POST['stripeToken']
+        # )
+        # return render(request, 'comercio/token.html')
+        stripeToken = request.POST['stripeToken']
+        print(stripeToken)
+        return render(request, 'comercio/token.html', context={'stripeToken': stripeToken}, )
